@@ -1,0 +1,91 @@
+/* stylelint-disable rule-empty-line-before */
+@use "../utils/" as *;
+
+:root {
+  // Colors
+  --black-color: #000;
+  --white-color: #fff;
+
+  // **
+  --success-color: #03cea5;
+  --danger-color: #ff4242;
+  --overlay-color: rgb(0 0 0 / 60%);
+  --overlay-light-color: rgb(59 69 78 / 40%);
+  --skeleton-color: #ccc;
+  --skeleton-border-color: rgb(110 111 120 / 10%);
+
+  // Filters
+  // --featured-filter: invert(14%) sepia(7%) saturate(2165%) hue-rotate(198deg) brightness(89%) contrast(90%);
+  // --mediumgray-filter: invert(48%) sepia(10%) saturate(272%) hue-rotate(196deg) brightness(87%) contrast(87%);
+  // --black-filter: invert(13%) sepia(12%) saturate(1459%) hue-rotate(196deg) brightness(93%) contrast(94%);
+
+  // Fonts
+  // --display-font: 700 3.5rem / 114% "Sen", sans-serif; // 56
+  // --h1-font: 700 3rem / 133% "Sen", sans-serif; // 48
+  // --h2-font: 700 2.25rem / 133% "Sen", sans-serif; // 36
+  // --h3-font: 700 1.75rem / 142% "Sen", sans-serif; // 28
+  // --h4-font: 700 1.5rem / 133% "Sen", sans-serif; // 24
+  // --h5-font: 700 1.25rem / 160% "Sen", sans-serif; // 20
+  // --h6-font: 700 1rem / 150% "Sen", sans-serif; // 16
+
+  // **
+  --validation-font: 500 0.75rem / 228% "Sen", sans-serif; // 14 (указать тут?)
+  --popup-font: 700 7rem / 114% "Sen", sans-serif; // 112
+
+  // Z-indexes
+  --z-postmodal: 1001;
+  --z-modal: 1000;
+  --z-premodal: 999;
+  --z-tooltip: 100;
+  --z-postfixed: 11;
+  --z-fixed: 10;
+  --z-prefixed: 9;
+  --z-postup: 2;
+  --z-up: 1;
+  --z-down: -1;
+
+  // Offsets
+  --scrollbar-offset: 0;
+
+  // Animations
+  --popup-animation: popup-animation 0.2s ease forwards;
+  --skeleton-animation: skeleton-animation 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --hide-on-resize-animation: hide-on-resize-animation 0.3s;
+
+  // Gradients
+  // --overlay-gradient: radial-gradient(80.99% 71.93% at 74.58% 0%, rgba(0 0 0 / 40%) 0%, rgba(0 0 0 / 60%) 100%);
+}
+
+// **
+@keyframes skeleton-animation {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+}
+
+// **
+@keyframes popup-animation {
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+// **
+@keyframes hide-on-resize-animation {
+  0% {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  99% {
+    opacity: 0;
+    pointer-events: none;
+  }
+}

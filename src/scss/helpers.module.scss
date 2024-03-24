@@ -1,0 +1,348 @@
+/* stylelint-disable order/order */
+@use "./utils/" as *;
+
+.srOnly {
+  position: absolute;
+  left: -10000px;
+  top: auto;
+  overflow: hidden;
+  width: 1px;
+  height: 1px;
+}
+
+.overflowHiddenX {
+  overflow-x: hidden;
+}
+
+.container {
+  // max-width: rem(1280);
+
+  // @include bp-up("container") {
+  //   margin-inline: auto;
+  // }
+
+  // @include bp-down("container") {
+  //   margin-inline: rem(30);
+  // }
+
+  // @include bp-down("992") {
+  //   margin-inline: rem(20);
+  // }
+
+  // @include bp-down("576") {
+  //   margin-inline: rem(10);
+  // }
+
+
+  // &1024 {
+  //   max-width: rem(1024);
+
+  //   @include bp-down("container") {
+  //     margin-inline: auto;
+  //   }
+
+  //   @include bp-down("1084") {
+  //     // 1024 + 30*2(margin-inline) + 20(scrollbar)
+  //     margin-inline: rem(30);
+  //   }
+
+  //   @include bp-down("992") {
+  //     margin-inline: rem(20);
+  //   }
+
+  //   @include bp-down("576") {
+  //     margin-inline: rem(10);
+  //   }
+  // }
+}
+
+.title {
+  // margin: 0;
+  // font: var(--h2-font);
+  // letter-spacing: rem(-2);
+  // color: var(--black-color);
+
+  // @include bp-down("container") {
+  //   font-size: calc(rem(25.49) + 0.78vw); // 36>28 (1340>320)
+  // }
+}
+
+.btn {
+  display: inline-block;
+  transition: opacity 0.3s;
+  cursor: pointer;
+
+  &:disabled {
+    opacity: 0.8;
+    pointer-events: none;
+  }
+
+  &Wrapper {
+    position: relative;
+
+    &::before {
+      content: none;
+      position: absolute;
+      left: 0;
+      top: calc(100% - rem(6));
+      font: var(--validation-font);
+    }
+
+    // **
+    &[data-auth-message] {
+      &::before {
+        content: attr(data-auth-message);
+        color: var(--danger-color);
+      }
+    }
+
+    // **
+    &[data-request-success] {
+      &::before {
+        content: "Data sent";
+        color: var(--success-color);
+      }
+    }
+
+    &[data-request-warning] {
+      &::before {
+        content: "Failed to send data";
+        color: var(--danger-color);
+      }
+    }
+
+    &[data-request-process] {
+      &::before {
+        content: "Data is sent...";
+      }
+    }
+  }
+
+  &:hover {
+    border: rem(1) solid var(--yellow-hover-color);
+    background-color: var(--yellow-hover-color);
+    transition: background-color 0.3s;
+  }
+}
+
+// **
+.input {
+  outline: none;
+  width: 100%;
+
+  &Wrapper {
+    position: relative;
+
+    &::before {
+      position: absolute;
+      left: 0;
+      top: calc(100% - rem(6));
+      font: var(--validation-font);
+    }
+
+    &::after {
+      position: absolute;
+      right: rem(66);
+      top: 50%;
+      z-index: var(--z-up);
+      display: block;
+      width: rem(20);
+      height: rem(20);
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+      transform: translate(50%, -50%);
+    }
+
+    // .inputSvg {
+    //   position: absolute;
+    //   right: rem(66);
+    //   top: 50%;
+    //   z-index: var(--z-up);
+    //   display: block;
+    //   transform: translate(50%, -50%);
+    // }
+
+    &[data-validity-warning] {
+      &::before {
+        content: attr(data-validity-warning);
+        color: var(--danger-color);
+        opacity: 1;
+        visibility: visible;
+      }
+
+      &::after {
+        content: "";
+        background-image: url("../../public/img/validity/warning.svg");
+        opacity: 1;
+        visibility: visible;
+      }
+
+      >.input {
+        border-color: var(--danger-color);
+      }
+
+      .inputSvg {
+        display: none;
+      }
+    }
+
+    &[data-validity-warning-pass] {
+      @extend .inputWrapper, [data-validity-warning];
+
+      &::before {
+        content: attr(data-validity-warning-pass);
+      }
+
+      &::after {
+        content: none;
+      }
+    }
+
+    &[data-validity-warning-file] {
+      @extend .inputWrapper, [data-validity-warning];
+
+      &::before {
+        content: attr(data-validity-warning-file);
+      }
+
+      &::after {
+        content: none;
+      }
+    }
+
+    &[data-validity-success] {
+      // &::before {
+      //   content: "Looks good!";
+      //   color: var(--success-color);
+      //   opacity: 1;
+      //   visibility: visible;
+      // }
+
+      &::after {
+        content: "";
+        background-image: url("../../public/img/validity/success.svg");
+        opacity: 1;
+        visibility: visible;
+      }
+
+      >.input {
+        border-color: var(--success-color);
+      }
+
+      .inputSvg {
+        display: none;
+      }
+    }
+
+    &[data-validity-success-pass] {
+      @extend .inputWrapper, [data-validity-success];
+
+      &::after {
+        content: none;
+      }
+    }
+
+    &[data-validity-success-file] {
+      @extend .inputWrapper, [data-validity-success];
+
+      &::after {
+        content: none;
+      }
+    }
+  }
+
+  // **
+  &::placeholder {
+    font: inherit;
+    color: inherit;
+  }
+
+  &:focus {
+    border: rem(1) solid var(--black-color);
+  }
+}
+
+// **
+.select {
+  position: relative;
+  cursor: pointer;
+
+  &Head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--black-color);
+
+    &:hover {
+      color: var(--mediumgray-color);
+    }
+
+    &Active {
+      color: var(--darkgray-color);
+    }
+  }
+
+  &Selected {
+    margin-right: rem(4);
+    word-break: break-word;
+    transition: color 0.3s;
+    user-select: none;
+  }
+
+  &Wrapper {
+    // box-shadow: var(--small-shadow);
+    position: absolute;
+    right: 0;
+    top: calc(100% + rem(4));
+    z-index: var(--z-postup);
+    border: rem(1) solid var(--mediumgray-color);
+    border-radius: rem(4);
+    padding-right: rem(10); // Для каст. скроллбара
+    width: 100%;
+    background-color: var(--light-color);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s;
+    cursor: default;
+
+    &Active {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+
+  &List {
+    list-style: none;
+    overflow: auto;
+    margin: 0;
+    padding: 0;
+    max-height: rem(160);
+    background-color: var(--light-color);
+  }
+
+  &Item {
+    padding-block: rem(2);
+    color: var(--black-color);
+    transition: color 0.3s;
+    cursor: pointer;
+
+    &:hover {
+      color: var(--mediumgray-color);
+    }
+
+    &Active {
+      color: var(--mediumgray-color);
+    }
+  }
+}
+
+// **
+.skeleton {
+  display: block;
+  border-radius: rem(4);
+  background-color: var(--skeleton-color);
+  animation: var(--skeleton-animation);
+  pointer-events: none;
+  user-select: none;
+}
