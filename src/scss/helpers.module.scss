@@ -69,6 +69,13 @@
 
 .btn {
   display: inline-block;
+  border: rem(1) solid var(--yellow-color);
+  padding-top: rem(17);
+  padding-bottom: rem(15);
+  padding-inline: rem(48);
+  font: var(--btn-font);
+  color: var(--black-color);
+  background-color: var(--yellow-color);
   transition: opacity 0.3s;
   cursor: pointer;
 
@@ -77,43 +84,45 @@
     pointer-events: none;
   }
 
+  &Message {
+    display: none;
+    margin-top: rem(5);
+    font: var(--validation-font);
+    line-height: 100%;
+    text-align: left;
+    color: var(--danger-color);
+  }
+
   &Wrapper {
     position: relative;
 
-    &::before {
-      content: none;
-      position: absolute;
-      left: 0;
-      top: calc(100% - rem(6));
-      font: var(--validation-font);
-    }
-
     // **
     &[data-auth-message] {
-      &::before {
-        content: attr(data-auth-message);
+      .btnMessage {
+        display: block;
         color: var(--danger-color);
       }
     }
 
     // **
     &[data-request-success] {
-      &::before {
-        content: "Data sent";
+      .btnMessage {
+        display: block;
         color: var(--success-color);
       }
     }
 
     &[data-request-warning] {
-      &::before {
-        content: "Failed to send data";
+      .btnMessage {
+        display: block;
         color: var(--danger-color);
       }
     }
 
     &[data-request-process] {
-      &::before {
-        content: "Data is sent...";
+      .btnMessage {
+        display: block;
+        color: var(--black-color);
       }
     }
   }
@@ -128,126 +137,68 @@
 // **
 .input {
   outline: none;
+  border: rem(1) solid var(--mediumgray05-color);
+  border-radius: rem(2);
+  padding-right: rem(86);
+  padding-left: rem(24);
+  padding-block: rem(23);
   width: 100%;
+  font: var(--body01-font);
+  color: inherit;
+  background-color: var(--light-color);
+  transition: border-color 0.3s;
+
+  &Message {
+    display: none;
+    margin-top: rem(5);
+    font: var(--validation-font);
+    line-height: 100%;
+    text-align: left;
+    color: var(--danger-color);
+  }
+
+  &SelectSvg {
+    position: absolute;
+    right: rem(66);
+    top: 50%;
+    width: rem(20);
+    height: rem(20);
+    stroke: var(--black-color);
+    transform: translateY(-50%) rotate(180deg);
+    transform-origin: center;
+
+    &Active {
+      @extend .inputSelectSvg;
+
+      transform: translateY(-50%) rotate(0);
+    }
+  }
 
   &Wrapper {
     position: relative;
+    font-size: 0;
 
-    &::before {
-      position: absolute;
-      left: 0;
-      top: calc(100% - rem(6));
-      font: var(--validation-font);
+    &Inner {
+      position: relative;
     }
 
-    &::after {
-      position: absolute;
-      right: rem(66);
-      top: 50%;
-      z-index: var(--z-up);
-      display: block;
-      width: rem(20);
-      height: rem(20);
-      background-position: center;
-      background-size: cover;
-      background-repeat: no-repeat;
-      transform: translate(50%, -50%);
-    }
-
-    // .inputSvg {
-    //   position: absolute;
-    //   right: rem(66);
-    //   top: 50%;
-    //   z-index: var(--z-up);
-    //   display: block;
-    //   transform: translate(50%, -50%);
-    // }
-
-    &[data-validity-warning] {
-      &::before {
-        content: attr(data-validity-warning);
-        color: var(--danger-color);
-        opacity: 1;
-        visibility: visible;
-      }
-
-      &::after {
-        content: "";
-        background-image: url("../../public/img/validity/warning.svg");
-        opacity: 1;
-        visibility: visible;
-      }
+    &Active {
+      @extend .inputWrapper;
 
       >.input {
         border-color: var(--danger-color);
       }
 
-      .inputSvg {
-        display: none;
-      }
-    }
+      .inputWrapperInner {
+        position: relative;
 
-    &[data-validity-warning-pass] {
-      @extend .inputWrapper, [data-validity-warning];
-
-      &::before {
-        content: attr(data-validity-warning-pass);
+        >.input {
+          border-color: var(--danger-color);
+        }
       }
 
-      &::after {
-        content: none;
-      }
-    }
-
-    &[data-validity-warning-file] {
-      @extend .inputWrapper, [data-validity-warning];
-
-      &::before {
-        content: attr(data-validity-warning-file);
-      }
-
-      &::after {
-        content: none;
-      }
-    }
-
-    &[data-validity-success] {
-      // &::before {
-      //   content: "Looks good!";
-      //   color: var(--success-color);
-      //   opacity: 1;
-      //   visibility: visible;
-      // }
-
-      &::after {
-        content: "";
-        background-image: url("../../public/img/validity/success.svg");
-        opacity: 1;
-        visibility: visible;
-      }
-
-      >.input {
-        border-color: var(--success-color);
-      }
-
-      .inputSvg {
-        display: none;
-      }
-    }
-
-    &[data-validity-success-pass] {
-      @extend .inputWrapper, [data-validity-success];
-
-      &::after {
-        content: none;
-      }
-    }
-
-    &[data-validity-success-file] {
-      @extend .inputWrapper, [data-validity-success];
-
-      &::after {
-        content: none;
+      >.inputMessage {
+        display: block;
       }
     }
   }
@@ -275,17 +226,20 @@
     color: var(--black-color);
 
     &:hover {
-      color: var(--mediumgray-color);
+      color: var(--black-color);
     }
 
     &Active {
-      color: var(--darkgray-color);
+      color: var(--black-color);
     }
   }
 
   &Selected {
+    display: block;
+    overflow: hidden;
     margin-right: rem(4);
-    word-break: break-word;
+    white-space: nowrap;
+    text-overflow: ellipsis;
     transition: color 0.3s;
     user-select: none;
   }
@@ -293,13 +247,13 @@
   &Wrapper {
     // box-shadow: var(--small-shadow);
     position: absolute;
-    right: 0;
+    left: rem(-1);
     top: calc(100% + rem(4));
     z-index: var(--z-postup);
     border: rem(1) solid var(--mediumgray-color);
     border-radius: rem(4);
     padding-right: rem(10); // Для каст. скроллбара
-    width: 100%;
+    width: calc(100% + rem(2));
     background-color: var(--light-color);
     opacity: 0;
     visibility: hidden;
@@ -328,7 +282,7 @@
     cursor: pointer;
 
     &:hover {
-      color: var(--mediumgray-color);
+      color: var(--purple-color);
     }
 
     &Active {
