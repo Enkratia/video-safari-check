@@ -4,7 +4,20 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 import { getSession } from "next-auth/react";
 
-import { BACKEND_URL } from "../../utils/constants";
+import { BACKEND_URL, IS_DEV } from "../../utils/constants";
+// import { revalidateTagsAction } from "../../utils/actions";
+
+// **
+// const invalidateFetchTags = async (tags: TagTypesType[]) => {
+//   try {
+//     await revalidateTagsAction(tags);
+//   } catch {
+//     console.warn(`Failed to revalidate tag: ${tags}`);
+//   }
+// };
+
+const tagTypes = [] as const;
+export type TagTypesType = (typeof tagTypes)[number];
 
 export const backendApi = createApi({
   baseQuery: fetchBaseQuery({
@@ -20,7 +33,8 @@ export const backendApi = createApi({
       return headers;
     },
   }),
-  // tagTypes: [],
+  keepUnusedDataFor: IS_DEV ? 60 : 600,
+  tagTypes,
   endpoints: (builder) => ({
     // GET
     // getUserById: builder.query<UserType, string>({
