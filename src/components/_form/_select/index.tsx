@@ -12,6 +12,8 @@ type SortingType = readonly SortingProperties[];
 
 // **
 type SelectProps = {
+  maxVisible?: number;
+  id: string;
   classNameInput: string;
   sorting: SortingType;
   activeOption: number;
@@ -19,13 +21,30 @@ type SelectProps = {
 };
 
 export const Select: React.FC<SelectProps> = ({
+  maxVisible = 5,
+  id,
   classNameInput,
   sorting,
   activeOption,
   onSelectChange,
 }) => {
+  const listRef = React.useRef<HTMLUListElement>(null);
   const [isOpen, setIsOpen] = React.useState(false);
 
+  React.useEffect(() => {
+    if (!listRef.current) return;
+    const visibleLiCount = maxVisible > sorting.length ? sorting.length : maxVisible;
+
+    const listPaddingTop = getComputedStyle(listRef.current).paddingTop;
+    const listFirstLi = listRef.current.firstElementChild;
+
+    const selectListLiHeight = (listFirstLi && getComputedStyle(listFirstLi).height) || "0";
+
+    const height = parseFloat(listPaddingTop) * 2 + parseFloat(selectListLiHeight) * visibleLiCount;
+    listRef.current.style.height = height + "px";
+  });
+
+  // **
   const onSelectClick = (e: React.MouseEvent<HTMLDivElement>, idx: number) => {
     if (e.target === e.currentTarget.lastElementChild) return;
 
@@ -41,13 +60,55 @@ export const Select: React.FC<SelectProps> = ({
     }
 
     document.documentElement.addEventListener("click", hideSelect);
+
+    if ("id" in e.target && e.target.id !== "" && e.target.id === id) {
+      select.focus();
+    }
   };
 
   const onSelectKeyDown = (e: React.KeyboardEvent<HTMLDivElement>, idx: number) => {
     const select = e.currentTarget;
 
+    const getPrevLiIdx = () => {
+      const prevFocusedLi = listRef.current?.querySelector("li:focus");
+      const allLi = listRef.current?.querySelectorAll("li") || [];
+      let liIdx = Array.from(allLi).findIndex((el) => el === prevFocusedLi);
+
+      if (!listRef.current?.contains(e.target as HTMLElement)) {
+        liIdx = activeOption;
+      }
+
+      return liIdx;
+    };
+
+    // **
     if (e.key === "Enter") {
       setIsOpen((b) => !b);
+    } else if (e.key === " ") {
+      e.preventDefault();
+      setIsOpen((b) => !b);
+    } else if (e.key === "ArrowUp" && isOpen) {
+      e.preventDefault();
+
+      const liIdx = getPrevLiIdx();
+
+      const nextOption = liIdx > 0 ? liIdx - 1 : liIdx;
+      listRef.current?.querySelectorAll("li")?.[nextOption]?.focus();
+    } else if (e.key === "ArrowDown" && isOpen) {
+      e.preventDefault();
+
+      const liIdx = getPrevLiIdx();
+
+      const nextOption = liIdx < sorting.length - 1 ? liIdx + 1 : liIdx;
+      listRef.current?.querySelectorAll("li")?.[nextOption]?.focus();
+    } else if ((e.key === "PageUp" || e.key === "Home") && isOpen) {
+      e.preventDefault();
+
+      listRef.current?.querySelectorAll("li")?.[0]?.focus();
+    } else if ((e.key === "PageDown" || e.key === "End") && isOpen) {
+      e.preventDefault();
+
+      listRef.current?.querySelectorAll("li")?.[sorting.length - 1]?.focus();
     }
 
     function hideSelect(e: MouseEvent) {
@@ -59,6 +120,10 @@ export const Select: React.FC<SelectProps> = ({
     }
 
     document.documentElement.addEventListener("click", hideSelect);
+
+    if ("id" in e.target && e.target.id !== "" && e.target.id === id) {
+      select.focus();
+    }
   };
 
   const onSelectOptionClick = (e: React.MouseEvent<HTMLLIElement>, idx: number, option: number) => {
@@ -77,30 +142,46 @@ export const Select: React.FC<SelectProps> = ({
     }
   };
 
+  const onSelectBlur = (e: React.FocusEvent<HTMLDivElement>) => {
+    if (!e.currentTarget.contains(e.relatedTarget)) {
+      setIsOpen(false);
+    }
+  };
+
   return (
     <div
       className={`${classNameInput} ${cs.select}`}
       role="listbox"
       tabIndex={0}
       onKeyDown={(e) => onSelectKeyDown(e, 0)}
+      onBlur={onSelectBlur}
       onClick={(e) => onSelectClick(e, 0)}>
       <div className={`${cs.selectHead} ${activeOption === 0 ? "" : cs.selectHeadActive}`}>
         <span className={cs.selectSelected}>{sorting[activeOption].title}</span>
-        <input type="hidden" name="option" value={sorting[activeOption].title} />
+
+        <input
+          type="text"
+          name="option"
+          value={sorting[activeOption].title}
+          id={id}
+          hidden
+          readOnly
+        />
 
         <Chevron
           aria-hidden="true"
           className={isOpen ? cs.inputSelectSvg : cs.inputSelectSvgActive}
         />
       </div>
-      <div
-        className={`${classNameInput} ${cs.selectWrapper} ${isOpen ? cs.selectWrapperActive : ""}`}>
-        <ul className={cs.selectList}>
+      <div className={`${cs.selectWrapper} ${isOpen ? cs.selectWrapperActive : ""}`}>
+        <ul className={cs.selectList} ref={listRef}>
           {sorting.map(({ title }, i) => (
             <li
               key={i}
               tabIndex={0}
-              className={`${cs.selectItem} ${activeOption === i ? cs.selectItemActive : ""}`}
+              className={`${classNameInput}  ${cs.selectItem} ${
+                activeOption === i ? cs.selectItemActive : ""
+              }`}
               role="option"
               aria-selected={activeOption === i ? "true" : "false"}
               onKeyDown={(e) => onSelectOptionKeyDown(e, 0, i)}
@@ -113,3 +194,11 @@ export const Select: React.FC<SelectProps> = ({
     </div>
   );
 };
+
+/* <Select
+  id=""
+  classNameInput={cs.input}
+  sorting={sorting}
+  activeOption={activeOption}
+  onSelectChange={onSelectChange}
+/> */
