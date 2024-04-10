@@ -2,11 +2,11 @@ export const checkRequestStatus = (isError: boolean, isSuccess: boolean, isLoadi
   let sendingState = {};
 
   if (isLoading) {
-    sendingState = { "data-request-process": "Data is sent..." };
+    sendingState = { "data-request-process": "Данные отправляются..." };
   } else if (isSuccess) {
-    sendingState = { "data-request-success": "Data sent" };
+    sendingState = { "data-request-success": "Данные успешно отправлены" };
   } else if (isError) {
-    sendingState = { "data-request-warning": "Failed to send data" };
+    sendingState = { "data-request-warning": "Не удалось отправить данные" };
   }
 
   return sendingState;

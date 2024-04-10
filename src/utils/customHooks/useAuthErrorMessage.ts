@@ -15,19 +15,19 @@ export const useAuthErrorMessage = () => {
 
   const messages = {
     fetchError: {
-      "data-auth-message": "Something went wrong",
+      "data-auth-message": "Что-то пошло не так",
     },
     accountNotExist: {
-      "data-auth-message": "Email or password are incorrect",
+      "data-auth-message": "Неправильный адрес почты и/или пароль",
     },
     emailNotVerfied: {
-      "data-auth-message": "Email not verified",
+      "data-auth-message": "Адрес почты не подтвержден",
     },
     emailRegistered: {
-      "data-auth-message": "Email is already registered",
+      "data-auth-message": "Адрес почты уже зарегистрирован",
     },
     emailNotFound: {
-      "data-auth-message": "Email not found",
+      "data-auth-message": "Адрес почты не найден",
     },
     default: {
       "data-auth-message": "",
