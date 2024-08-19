@@ -15,6 +15,10 @@ const Home: React.FC = () => {
       <h1 className={cs.srOnly}></h1>
 
       {/* <Hero /> */}
+
+      <video controls={true} preload="metadata">
+        <source src="https://o-complex.com/static/video/good_zeolite.webm" type="video/mp4" />
+      </video>
     </main>
   );
 };
