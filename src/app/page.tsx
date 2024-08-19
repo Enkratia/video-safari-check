@@ -16,7 +16,7 @@ const Home: React.FC = () => {
 
       {/* <Hero /> */}
 
-      <video controls={true} preload="metadata">
+      <video controls={true} preload="metadata" playsInline>
         <source src="https://o-complex.com/static/video/good_zeolite.webm" type="video/mp4" />
       </video>
     </main>
